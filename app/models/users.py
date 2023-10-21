@@ -1,5 +1,5 @@
 from app import db
-from bcrypt import hashpw, gensalt
+from bcrypt import hashpw, gensalt, checkpw
 
 
 class User(db.Model):
@@ -12,8 +12,9 @@ class User(db.Model):
     def set_password(self, password):
         # Hash and set the user's password
         salt = gensalt()
-        self.password = hashpw(password.encode('utf-8'), salt)
+        self.password = hashpw(password.encode("utf-8"), salt)
 
     def check_password(self, password):
         # Check if the provided password matches the stored hash
-        return hashpw(password.encode('utf-8'), self.password) == self.password
+        return checkpw(password.encode("utf-8"), self.password.encode("utf-8"))
+
