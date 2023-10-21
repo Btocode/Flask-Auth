@@ -1,8 +1,9 @@
 import os
+from dotenv import load_dotenv
 
-DEBUG = True
-SECRET_KEY = "mysupersecret"
-SQLALCHEMY_DATABASE_URI = (
-    "mysql://root:lSstV9d2zUKp8wDbuzLa@containers-us-west-75.railway.app:6031/railway"
-)
+load_dotenv()
+
+DEBUG = os.getenv("DEBUG", False)
+SECRET_KEY = os.getenv("SECRET_KEY", "")
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI", "")
 SQLALCHEMY_TRACK_MODIFICATIONS = False

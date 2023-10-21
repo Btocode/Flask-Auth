@@ -7,6 +7,9 @@ from datetime import timedelta
 from flask_migrate import Migrate
 from flask_restful import Api
 from .error_handlers import *
+import os
+from dotenv import load_dotenv
+
 
 
 # creating a Flask app
@@ -16,9 +19,12 @@ api = Api()
 
 
 def create_app():
+
     from .routes.app_routes import app_routes
 
     app = Flask(__name__)
+    load_dotenv()
+
 
     app.register_error_handler(400, bad_request_error)
     app.register_error_handler(401, unauthorized_error)
@@ -26,14 +32,16 @@ def create_app():
     app.register_error_handler(500, internal_server_error)
 
     app.config.from_pyfile("config.py")
-    app.config["JWT_SECRET_KEY"] = "myjwtsecret"
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(
         hours=1
     )  # Set the expiration time to 1 hour
-    app.config['JWT_ACCESS_DENIED_MESSAGE'] = 'You are not authorized to access this resource.'
-    app.config['JWT_EXPIRED_TOKEN_MESSAGE'] = 'Your token has expired.'
-    app.config['JWT_INVALID_TOKEN_MESSAGE'] = 'Invalid token. Please log in again.'
-    app.config['JWT_REVOKED_TOKEN_MESSAGE'] = 'Your token has been revoked.'
+    app.config[
+        "JWT_ACCESS_DENIED_MESSAGE"
+    ] = "You are not authorized to access this resource."
+    app.config["JWT_EXPIRED_TOKEN_MESSAGE"] = "Your token has expired."
+    app.config["JWT_INVALID_TOKEN_MESSAGE"] = "Invalid token. Please log in again."
+    app.config["JWT_REVOKED_TOKEN_MESSAGE"] = "Your token has been revoked."
 
     jwt = JWTManager(app)
     migrate = Migrate(app, db)
