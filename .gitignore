@@ -6,6 +6,8 @@ __pycache__/
 # Logs
 *.log
 
+migrations
+
 # Environment
 env/
 venv/

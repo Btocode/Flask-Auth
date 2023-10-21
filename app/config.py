@@ -1,8 +1,8 @@
 import os
 
 DEBUG = True
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = "mysupersecret"
 SQLALCHEMY_DATABASE_URI = (
-    "mysql://root:Q0Ikh4Gn9E1CLiY7XrX0@containers-us-west-31.railway.app:6556/railway"
+    "mysql://root:lSstV9d2zUKp8wDbuzLa@containers-us-west-75.railway.app:6031/railway"
 )
 SQLALCHEMY_TRACK_MODIFICATIONS = False

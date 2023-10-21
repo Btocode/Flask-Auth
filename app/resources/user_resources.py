@@ -48,6 +48,7 @@ class UserRegistrationResource(Resource):
         return jsonify({"message": "User registered successfully"})
 
 class GetUserResource(Resource):
+    @jwt_required()
     def get(self, user_id=None):
         if user_id:
             user = User.query.get(user_id)
