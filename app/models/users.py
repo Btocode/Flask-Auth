@@ -8,6 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(80), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    items = db.relationship('Item', back_populates='user')
 
     def set_password(self, password):
         # Hash and set the user's password
