@@ -8,6 +8,12 @@ from app.resources.item_resources import *
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 import os
+from flask_jwt_extended import (
+    create_access_token,
+    jwt_required,
+    create_refresh_token,
+    get_jwt_identity,
+)
 
 app_routes = Blueprint("app", __name__)
 
@@ -15,6 +21,7 @@ api.add_resource(HealthCheck, "/")
 api.add_resource(UserRegistrationResource, "/auth/register")
 api.add_resource(GetUserResource, "/users", "/users/<int:user_id>")
 api.add_resource(LoginUserResource, "/auth/login")
+api.add_resource(RefreshTokenResource, "/auth/refresh")
 api.add_resource(ItemResource, "/items", "/items/<int:item_id>")
 
 
@@ -64,3 +71,5 @@ def view_uploaded_file(filename):
         return send_file(file_path, as_attachment=True)
     else:
         return jsonify({"error": "File not found"}), 404
+
+

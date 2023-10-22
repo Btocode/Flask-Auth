@@ -11,7 +11,6 @@ import os
 from dotenv import load_dotenv
 
 
-
 # creating a Flask app
 # Define the database object outside the app instance
 db = SQLAlchemy()
@@ -19,12 +18,10 @@ api = Api()
 
 
 def create_app():
-
     from .routes.app_routes import app_routes
 
     app = Flask(__name__)
     load_dotenv()
-
 
     app.register_error_handler(400, bad_request_error)
     app.register_error_handler(401, unauthorized_error)
@@ -36,6 +33,7 @@ def create_app():
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(
         hours=1
     )  # Set the expiration time to 1 hour
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
     app.config[
         "JWT_ACCESS_DENIED_MESSAGE"
     ] = "You are not authorized to access this resource."

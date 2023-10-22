@@ -4,7 +4,7 @@ from flask import request, jsonify
 from app import db
 from app.models.users import User
 from app.schemas.user_schema import UserSchema
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, create_refresh_token, get_jwt_identity
 
 
 
@@ -80,13 +80,23 @@ class LoginUserResource(Resource):
 
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user.id, fresh=True)
+            refresh_token = create_refresh_token(identity=user.id)
             data = UserSchema().dump(user)
             data["access_token"] = access_token
+            data["refresh_token"] = refresh_token
             return jsonify(data)
         else:
             abort(401, message="Invalid username or password")
         
+class RefreshTokenResource(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        identity = get_jwt_identity()
+        access_token = create_access_token(identity=identity, fresh=False)
+        refresh_token = create_refresh_token(identity=identity)
+        data = {"access_token": access_token, "refresh_token": refresh_token}
+        return jsonify(data)
 
 
 class HealthCheck(Resource):
